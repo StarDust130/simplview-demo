@@ -338,7 +338,7 @@ export default function HowItWorksSection() {
         >
           <div className="grid lg:grid-cols-[1fr_0.75fr]">
             <div className="relative min-h-[25rem] overflow-hidden p-8 md:p-12">
-              <div className="absolute inset-0 bg-[url('/bg.gif')] bg-cover bg-center opacity-[0.15] blur-sm" />
+              <div className="absolute inset-0  bg-cover bg-center opacity-[0.15] blur-sm" />
               <div className="absolute inset-0 bg-gradient-to-br from-[#0A0D14] via-[#0A0D14]/90 to-blue-950/80" />
               <div className="relative">
                 <span className="inline-flex rounded-full bg-green-300 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-slate-950">
