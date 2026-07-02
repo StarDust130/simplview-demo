@@ -6,17 +6,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 const productLinks = [
-  { label: "Simplview analyst studio", href: "#how-it-works" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Linkedin", href: "#" },
+  { label: "Simplview analyst studio", href: "http://chandrashekhar.me/how-it-works" },
+  { label: "How it works", href: "http://chandrashekhar.me/how-it-works" },
+  { label: "Pricing", href: "http://chandrashekhar.me/pricing" },
+  { label: "Linkedin", href: "http://chandrashekhar.me/" },
 ];
 
 const companyLinks = [
-  { label: "About", href: "#problems" },
-  { label: "Blog", href: "#" },
-  { label: "Contact", href: "#contact" },
-  { label: "Book a Demo", href: "#contact" },
+  { label: "About", href: "http://chandrashekhar.me/problems" },
+  { label: "Blog", href: "http://chandrashekhar.me/" },
+  { label: "Contact", href: "http://chandrashekhar.me/contact" },
+  { label: "Book a Demo", href: "http://chandrashekhar.me/contact" },
 ];
 
 export default function Footer() {
@@ -37,7 +37,7 @@ export default function Footer() {
           className="grid gap-6 lg:grid-cols-[1.15fr_1fr_1fr]"
         >
           <div className="rounded-lg border border-white/[0.12] bg-white/[0.08] p-5 backdrop-blur-xl">
-            <a href={"#"}>
+            <a href={"http://chandrashekhar.me/"}>
               <Image src="/logo.png" width={150} height={150} alt="Simplview" />
             </a>
             <p className="mt-5 max-w-md text-sm font-semibold leading-6 text-white/[0.72]">
@@ -132,14 +132,24 @@ export default function Footer() {
         <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 text-xs font-bold text-white/[0.48] sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; 2026 by VK Education and Consulting</p>
           <div className="flex flex-wrap gap-4">
-            <a href="#" className="transition-colors hover:text-white">
+            <a
+              href="http://chandrashekhar.me/"
+              target="_blank"
+              className="transition-colors hover:text-white"
+            >
               Privacy
             </a>
-            <a href="#" className="transition-colors hover:text-white">
+            <a
+              href="http://chandrashekhar.me/"
+              target="_blank"
+              
+              className="transition-colors hover:text-white"
+            >
               Terms
             </a>
             <a
-              href="#"
+              href="http://chandrashekhar.me/"
+              target="_blank"
               className="inline-flex items-center gap-1 transition-colors hover:text-white"
             >
               <span className="grid h-4 w-4 place-items-center rounded-sm bg-white/[0.14] text-[9px] text-white">
