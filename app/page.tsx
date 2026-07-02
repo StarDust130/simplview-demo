@@ -1,6 +1,6 @@
 "use client";
 
-import Footer from "@/components/landing/Footer";
+import Footer from "@/components/landing/footer";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import Navbar from "@/components/landing/Navbar";
 import SecuritySection from "@/components/landing/SecuritySection";
