@@ -64,8 +64,8 @@ const bottomNav = [
 export function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({
-    "DATA SOURCES": true,
-    "PUBLISHED DASHBOARDS": true,
+    "DATA SOURCES": false,
+    "PUBLISHED DASHBOARDS": false,
   });
 
   const toggle = (title: string) => {
