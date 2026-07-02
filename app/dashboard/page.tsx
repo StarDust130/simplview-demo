@@ -1,119 +1,396 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Mic,
-  Upload,
-  ArrowRight,
-  MessageSquare,
+  Plus,
+  Globe,
   Sparkles,
   FileText,
   BarChart3,
-  TrendingUp,
-  Zap,
-  Users,
-  ArrowUpRight,
+  MessageSquare,
+  Clock,
+  ArrowUp,
+  X,
+  FileLineChart,
+  Cloud,
+  Database,
+  HardDrive,
+  LayoutGrid,
+  FileSpreadsheet,
+  Mic,
 } from "lucide-react";
 
+// --- Typewriter Hook ---
+const useTypewriter = (
+  texts: string[],
+  typingSpeed = 40,
+  deletingSpeed = 30,
+  pauseDuration = 2500,
+) => {
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const currentText = texts[loopNum % texts.length];
+
+    if (isDeleting) {
+      timer = setTimeout(() => {
+        setText(currentText.substring(0, text.length - 1));
+        if (text.length === 0) {
+          setIsDeleting(false);
+          setLoopNum(loopNum + 1);
+        }
+      }, deletingSpeed);
+    } else {
+      timer = setTimeout(() => {
+        setText(currentText.substring(0, text.length + 1));
+        if (text.length === currentText.length) {
+          setTimeout(() => setIsDeleting(true), pauseDuration);
+        }
+      }, typingSpeed);
+    }
+    return () => clearTimeout(timer);
+  }, [
+    text,
+    isDeleting,
+    loopNum,
+    texts,
+    typingSpeed,
+    deletingSpeed,
+    pauseDuration,
+  ]);
+
+  return text;
+};
+
+// --- Animation Variants ---
 const container = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
 const item = {
-  hidden: { y: 24, opacity: 0 },
+  hidden: { y: 15, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", damping: 18, stiffness: 100 },
+    transition: { type: "spring", damping: 22, stiffness: 120 },
   },
 };
 
 export default function Dashboard() {
+  const [inputValue, setInputValue] = useState("");
+  const [isWebSearch, setIsWebSearch] = useState(false);
+  const [attachments, setAttachments] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const placeholderText = useTypewriter([
+    "What can I build for you today?",
+    "Analyze the Q3 revenue trends...",
+    "Compare user retention cohorts...",
+  ]);
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  };
+
+  const addMockAttachment = () => {
+    if (attachments.length < 3)
+      setAttachments([
+        ...attachments,
+        `Dataset_v${attachments.length + 1}.csv`,
+      ]);
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(attachments.filter((_, i) => i !== index));
+  };
+
   return (
-    <div className="min-h-full relative">
-      {/* 🌿 Nature Background — Real Hill Texture Feel */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Top sky area */}
-        <div className="absolute top-0 left-0 right-0 h-[45%] bg-white/80  to-transparent" />
-
-        
-
-        {/* Warm bottom glow */}
-        <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#e8e4d9]/60 to-transparent" />
+    <div className="min-h-screen w-full flex flex-col items-center pt-16 lg:pt-24 relative bg-[#fcfcfc] font-sans px-4 sm:px-6 overflow-hidden">
+      {/* Background Mesh */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
+        <motion.div
+          animate={{ scale: [1, 1.02, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] w-[500px] h-[300px] bg-blue-50/80 rounded-full blur-[100px]"
+        />
       </div>
 
       <motion.div
         variants={container}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 lg:py-16"
+        className="relative z-10 w-full max-w-4xl"
       >
-        {/* 🚀 Header */}
-        <motion.div variants={item} className="text-center mb-10 lg:mb-14">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-3 tracking-tight text-stone-900">
+        {/* Header - Fixed the 'd' clipping bug with pr-2 */}
+        <motion.div variants={item} className="text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-4">
             Simplview{" "}
-            <span className="font-serif italic text-[#0f8eea]]">Launchpad</span>
+            <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 pr-2">
+              Launchpad
+            </span>
           </h1>
-          <p className="text-base lg:text-lg text-stone-500 font-medium">
-            Jump back in from where you left off
+          <p className="text-sm sm:text-base text-slate-500 font-medium tracking-tight">
+            Interact with your data and explore the boundless creative world
           </p>
         </motion.div>
 
-        {/* 🔍 Search Bar — Glass over nature */}
-        <motion.div variants={item} className="max-w-3xl mx-auto mb-6">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-[#0f8eea]]/10 rounded-full opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 blur-xl transition-all duration-500" />
-            <div className="relative flex items-center gap-3 px-5 lg:px-6 py-3.5 lg:py-4 bg-white/85 backdrop-blur-2xl rounded-full border border-white/80 shadow-2xl shadow-stone-200/40 hover:shadow-stone-300/50 transition-all duration-300">
-              <Mic className="w-5 h-5 text-stone-400 flex-shrink-0 hover:text-[#0f8eea] transition-colors cursor-pointer" />
-              <input
-                type="text"
-                placeholder="Ask Simplview to analyze trends"
-                className="flex-1 bg-transparent outline-none text-stone-800 placeholder:text-stone-400 text-sm lg:text-base min-w-0"
-              />
-              <div className="flex items-center gap-1 lg:gap-2 flex-shrink-0">
-                <button className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-2 rounded-full text-stone-500 hover:text-[#0f8eea]] hover:bg-stone-100/80 transition-all text-sm font-medium">
-                  <Upload className="w-4 h-4" />
-                  <span className="hidden sm:inline">Upload</span>
-                </button>
-                <div className="w-px h-5 bg-stone-200" />
-                <button className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-2 rounded-full  text-[#0f8eea]] hover:bg-[#e4efe0] transition-all text-sm font-medium">
-                  <span className="w-2 h-2 rounded-full bg-whie animate-pulse" />
-                  <span>Sheets</span>
-                </button>
-                <motion.button
-                  whileHover={{ scale: 1.08, x: 2 }}
-                  whileTap={{ scale: 0.92 }}
-                  className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-[#0f8eea]] text-sky-500 flex items-center justify-center shadow-lg hover:bg-[#234820] transition-colors"
-                >
-                  <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5" />
-                </motion.button>
+        {/* Dynamic AI Input */}
+        <motion.div variants={item} className="w-full max-w-3xl mx-auto mb-8">
+          <div className="relative bg-white rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] focus-within:shadow-[0_12px_40px_-12px_rgba(37,99,235,0.2)] focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:border-blue-300 transition-all duration-300 p-2 sm:p-3 group flex flex-col">
+            {/* File Attachments */}
+            {attachments.length > 0 && (
+              <div className="flex flex-wrap gap-2 px-3 pt-2 pb-1">
+                {attachments.map((file, idx) => (
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    key={idx}
+                    className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm"
+                  >
+                    <FileLineChart className="w-4 h-4 text-emerald-500" />
+                    <span className="font-medium text-slate-700 truncate max-w-[120px]">
+                      {file}
+                    </span>
+                    <button
+                      onClick={() => removeAttachment(idx)}
+                      className="text-slate-400 hover:text-red-500 transition-colors ml-1 cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </motion.div>
+                ))}
               </div>
+            )}
+
+            {/* Elastic Text Area */}
+            <div className="relative w-full min-h-[44px]">
+              <textarea
+                ref={textareaRef}
+                value={inputValue}
+                onChange={handleInput}
+                className="w-full bg-transparent outline-none resize-none text-slate-900 text-base px-3 py-2 peer z-20 relative font-medium leading-relaxed max-h-[200px] overflow-y-auto"
+                spellCheck={false}
+                rows={1}
+              />
+              {/* Typewriter Overlay */}
+              {inputValue.length === 0 && (
+                <div className="absolute top-2 left-3 pointer-events-none text-slate-400 text-base z-10 flex items-center">
+                  {placeholderText}
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.8, repeat: Infinity }}
+                    className="w-[1.5px] h-[1em] bg-blue-500 ml-1 inline-block"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Bottom Toolbar */}
+            <div className="flex items-center justify-between px-2 pt-2 mt-2 border-t border-slate-50">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <button
+                  onClick={addMockAttachment}
+                  className="p-2 cursor-pointer text-slate-400 hover:text-slate-700 md:hover:bg-slate-100 rounded-xl transition-all"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+
+                {/* Globe with Tooltip */}
+                <div className="relative group/tooltip">
+                  <button
+                    onClick={() => setIsWebSearch(!isWebSearch)}
+                    className={`p-2 cursor-pointer rounded-xl transition-all ${isWebSearch ? "text-blue-600 bg-blue-50" : "text-slate-400 hover:text-slate-700 md:hover:bg-slate-100 "}`}
+                  >
+                    <Mic className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="w-[1px] h-5 bg-slate-200 mx-1 hidden sm:block" />
+
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-blue-50/60 md:hover:bg-blue-50 text-blue-600 rounded-xl transition-all border border-blue-100/50 cursor-pointer"
+                >
+                  <FileSpreadsheet className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm font-semibold">Sheets</span>
+                </button>
+              </div>
+
+              {/* Submit Button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${inputValue.length > 0 || attachments.length > 0 ? "bg-blue-600 text-white shadow-md hover:bg-blue-700" : "bg-slate-50 border border-slate-100 text-slate-300"}`}
+              >
+                <ArrowUp className="w-5 h-5" />
+              </motion.button>
             </div>
           </div>
         </motion.div>
 
-        {/* 🔗 Quick Links */}
+        {/* Quick Actions */}
         <motion.div
           variants={item}
-          className="flex items-center justify-center gap-3 lg:gap-4 text-sm text-stone-500 mb-12 lg:mb-16"
+          className="flex justify-center gap-4 sm:gap-8 text-sm text-slate-500 mb-12"
         >
-          <button className="hover:text-[#0f8eea]] transition-colors font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/50">
-            <Sparkles className="w-4 h-4" />
-            Start Analysis From Scratch
+          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group">
+            <Sparkles className="w-4 h-4 text-blue-500 group-hover:animate-pulse" />{" "}
+            Start From Scratch
           </button>
-          <span className="text-stone-300">•</span>
-          <button className="hover:text-[#0f8eea]] transition-colors font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/50">
-            <FileText className="w-4 h-4" />
+          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group">
+            <FileText className="w-4 h-4 text-slate-400 group-hover:text-blue-500" />{" "}
             Try a Template
           </button>
         </motion.div>
 
+        {/* Recent Grids */}
+        <motion.div
+          variants={item}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl mx-auto pb-12"
+        >
+          {/* Smartbooks Column */}
+          <div>
+            <div className="flex items-center gap-2 mb-4 px-1">
+              <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
+              <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
+                Recent Smartbooks
+              </h3>
+            </div>
+            <div className="space-y-3">
+              <div className="w-full flex items-center justify-between p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-sm md:hover:shadow-md md:hover:border-blue-200 transition-all cursor-pointer group">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50 transition-colors">
+                    <MessageSquare className="w-4 h-4 text-slate-500 group-hover:text-blue-600" />
+                  </div>
+                  <span className="text-sm font-semibold text-slate-700 group-hover:text-slate-900">
+                    📉 Sales Drop?
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 text-xs font-medium text-slate-400">
+                  <Clock className="w-3 h-3" /> 7/2/2026
+                </div>
+              </div>
+            </div>
+          </div>
 
+          {/* Dashboards Column */}
+          <div>
+            <div className="flex items-center gap-2 mb-4 px-1">
+              <div className="w-1.5 h-4 bg-blue-500 rounded-full" />
+              <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
+                Recent Dashboards
+              </h3>
+            </div>
+            <div className="h-[72px] sm:h-[88px] flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50">
+              <p className="text-sm text-slate-400 font-medium">
+                No dashboards published
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
+
+      {/* --- Data Source Modal --- */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            />
+
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col p-6 sm:p-8"
+            >
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-6 right-6 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="flex items-center justify-between w-full max-w-lg mx-auto mb-10 relative">
+                <div className="absolute top-1/2 left-0 w-full h-[2px] bg-slate-100 -z-10 -translate-y-1/2" />
+                {["Source", "Auth", "Select", "Confirm"].map((step, i) => (
+                  <div
+                    key={step}
+                    className="flex items-center gap-2 bg-white px-2"
+                  >
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-400"}`}
+                    >
+                      {i + 1}
+                    </div>
+                    <span
+                      className={`text-sm font-semibold hidden sm:block ${i === 0 ? "text-indigo-600" : "text-slate-400"}`}
+                    >
+                      {step}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                  Connect Data Source
+                </h2>
+                <p className="text-slate-500 font-medium">
+                  Select a platform to import your data from.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex flex-col items-center justify-center p-6 border-2 border-emerald-500 bg-emerald-50/30 rounded-2xl cursor-pointer hover:bg-emerald-50/50 transition-colors "
+                >
+                  <FileLineChart className="w-8 h-8 text-emerald-600 mb-3" />
+                  <span className="font-bold text-slate-900">
+                    Google Sheets
+                  </span>
+                </div>
+
+                {[
+                  { icon: Database, name: "BigQuery" },
+                  { icon: Cloud, name: "Google Drive" },
+                  { icon: HardDrive, name: "Cloud SQL" },
+                  { icon: Cloud, name: "Cloud Storage" },
+                  { icon: Database, name: "Firestore" },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col items-center justify-center p-6 border border-slate-100 bg-slate-50/50 rounded-2xl opacity-60 grayscale cursor-not-allowed"
+                  >
+                    <item.icon className="w-8 h-8 text-slate-400 mb-3" />
+                    <span className="font-bold text-slate-600 mb-1">
+                      {item.name}
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-200 px-2 py-0.5 rounded-full">
+                      Coming Soon
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
