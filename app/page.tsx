@@ -62,7 +62,7 @@ export default function Home() {
             initial={{ y: 25, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.45 }}
-            className="mt-8 flex flex-col items-center gap-3 sm:flex-row"
+            className="mt-8 flex  items-center gap-3 flex-row"
           >
             {/* Primary — Demo */}
             <Link
@@ -92,9 +92,9 @@ export default function Home() {
             initial={{ y: 60, opacity: 0, scale: 0.96 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-            className="mt-14 w-full max-w-4xl"
+            className="mt-14 w-full max-w-5xl mx-auto"
           >
-            <div className="overflow-hidden rounded-2xl border border-white/20 bg-white shadow-2xl shadow-black/15 backdrop-blur-2xl">
+            <div className="overflow-hidden rounded-2xl border border-white/20 bg-white shadow-2xl shadow-black/15 backdrop-blur-2xl transform-gpu">
               {/* Browser Chrome */}
               <div className="flex items-center gap-2 border-b border-black/5 bg-white/50 px-4 py-2.5 backdrop-blur-sm">
                 <div className="flex gap-1.5">
@@ -121,13 +121,13 @@ export default function Home() {
               </div>
 
               {/* Video */}
-              <div className="relative aspect-video w-full bg-slate-900">
+              <div className="relative w-full bg-white">
                 <video
                   autoPlay
                   muted
                   loop
                   playsInline
-                  className="h-full w-full object-cover"
+                  className="w-full h-auto block -mb-[1px]"
                 >
                   <source src="/landing-page-video.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
