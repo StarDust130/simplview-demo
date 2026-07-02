@@ -1,6 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -74,13 +79,7 @@ export default function Navbar() {
           }`}
         >
           <a href="#" aria-label="Simplview home">
-            <Image
-              src="/logo.png"
-              width={150}
-              height={150}
-              alt="Simplview"
-            
-            />
+            <Image src="/logo.png" width={150} height={150} alt="Simplview" />
           </a>
 
           <div className="hidden items-center gap-1 rounded-full border border-current/10 bg-white/[0.12] p-1 md:flex">
@@ -150,7 +149,7 @@ export default function Navbar() {
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-[60] bg-slate-950 text-white md:hidden"
           >
-            <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-20" />
+            <div className="absolute inset-0 bg-[url('/bg.gif')] bg-cover bg-center opacity-20" />
             <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/[0.88] to-slate-950" />
 
             <div className="relative flex min-h-full flex-col px-5 py-5">
@@ -161,7 +160,6 @@ export default function Navbar() {
                     width={154}
                     height={150}
                     alt="Simplview"
-                  
                   />
                 </a>
                 <button

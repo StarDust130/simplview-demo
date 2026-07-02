@@ -25,7 +25,7 @@ export default function Footer() {
       id="footer"
       className="relative z-10 overflow-hidden bg-slate-950 text-white"
     >
-      <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-[0.18]" />
+      <div className="absolute inset-0 bg-[url('/bg.gif')] bg-cover bg-center opacity-[0.18]" />
       <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/[0.94] to-slate-950" />
 
       <div className="relative mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-14">

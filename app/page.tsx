@@ -19,7 +19,7 @@ export default function Home() {
         {/* Background Image */}
         <div className="fixed inset-0 z-0">
           <Image
-            src="/bg.png"
+            src="/bg.gif"
             alt="Nature background"
             fill
             priority

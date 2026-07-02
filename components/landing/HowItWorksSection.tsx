@@ -82,36 +82,74 @@ const timeline = [
   "Insight explained",
 ];
 
+// Reusable animated chart to bring static dashboards to life
+function LiveChart({
+  heights,
+  className = "",
+}: {
+  heights: number[];
+  className?: string;
+}) {
+  return (
+    <div className={`flex items-end gap-1.5 w-full h-full ${className}`}>
+      {heights.map((h, i) => (
+        <motion.span
+          key={i}
+          initial={{ height: `${h}%` }}
+          animate={{
+            height: [
+              `${h}%`,
+              `${Math.max(15, h - 25)}%`,
+              `${Math.min(100, h + 20)}%`,
+              `${h}%`,
+            ],
+          }}
+          transition={{
+            duration: 3 + (i % 2),
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.1,
+          }}
+          className="w-full rounded-t-sm bg-gradient-to-t from-blue-600 via-cyan-400 to-green-300"
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
       className="relative z-10 scroll-mt-24 overflow-hidden bg-white py-16 text-slate-950 md:scroll-mt-28 md:py-20"
     >
-      <div className="absolute left-0 top-0 h-96 w-full bg-linear-to-b from-sky-50 to-transparent" />
+      <div className="absolute left-0 top-0 h-96 w-full bg-gradient-to-b from-sky-50 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl px-5 md:px-8">
-        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        {/* Fixed Grid: 12 Columns total, locked fractions */}
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+          {/* Left Text & Steps (5 Columns) */}
           <motion.div
             initial={{ x: -34, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: "easeOut" }}
+            className="lg:col-span-5"
           >
             <span className="inline-flex rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[11px] font-black uppercase text-blue-600">
               How It Works
             </span>
-            <h2 className="mt-5 max-w-xl text-4xl font-black leading-[1.02] tracking-tight md:text-6xl">
+            <h2 className="mt-5 max-w-xl text-4xl font-black leading-[1.02] tracking-tight md:text-5xl lg:text-6xl">
               From question to{" "}
               <span className="font-serif italic font-semibold">insight</span>{" "}
               in 30 seconds
             </h2>
-            <p className="mt-5 max-w-lg text-base font-medium leading-7 text-slate-600">
+            <p className="mt-5 max-w-md text-base font-medium leading-7 text-slate-600">
               Three steps. No SQL. No dashboards. No waiting for an analyst. Any
               manager on your team can do this from day one.
             </p>
 
-            <div className="mt-9 space-y-3">
+            <div className="mt-10 space-y-4">
               {steps.map((step, index) => (
                 <motion.article
                   key={step.num}
@@ -119,24 +157,21 @@ export default function HowItWorksSection() {
                   whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.55, delay: index * 0.08 }}
-                  className="group grid gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)] transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_20px_55px_rgba(37,99,235,0.11)] sm:grid-cols-[4rem_1fr]"
+                  className="group grid gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl sm:grid-cols-[4rem_1fr] cursor-default"
                 >
                   <div className="flex items-start justify-between gap-3 sm:block">
-                    <div className="grid h-12 w-12 place-items-center rounded-lg bg-slate-950 text-white transition-transform duration-300 group-hover:rotate-3">
+                    <div className="grid h-12 w-12 place-items-center rounded-xl bg-slate-950 text-white transition-transform duration-300 group-hover:scale-105">
                       <step.icon className="h-5 w-5" />
                     </div>
-                    <span className="mt-3 block text-xs font-black text-blue-600">
-                      {step.num}
+                    <span className="mt-3 block text-[10px] font-black uppercase text-blue-600">
+                      Step {step.num}
                     </span>
                   </div>
                   <div>
-                    <p className="text-[11px] font-black uppercase text-slate-400">
-                      {step.media}
-                    </p>
-                    <h3 className="mt-1 text-lg font-black leading-tight">
+                    <h3 className="text-[17px] font-black leading-tight text-slate-900">
                       {step.title}
                     </h3>
-                    <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
+                    <p className="mt-2 text-[13px] font-medium leading-relaxed text-slate-500">
                       {step.desc}
                     </p>
                   </div>
@@ -145,38 +180,42 @@ export default function HowItWorksSection() {
             </div>
           </motion.div>
 
+          {/* Right Mock Dashboard (7 Columns) */}
           <motion.div
             initial={{ x: 34, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.75, ease: "easeOut" }}
-            className="relative"
+            className="relative lg:col-span-7"
           >
-            <div className="absolute -inset-4 rounded-lg bg-[url('/bg.png')] bg-cover bg-center opacity-20 blur-sm" />
-            <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-[#f8fbff] shadow-[0_35px_95px_rgba(15,23,42,0.16)]">
-              <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-red-300" />
-                <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
-                <span className="ml-auto rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black text-slate-500">
+            <div className="absolute -inset-6 rounded-2xl bg-[url('/bg.gif')] bg-cover bg-center opacity-20 blur-md pointer-events-none" />
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-[#f8fbff] shadow-2xl">
+              {/* Browser Bar */}
+              <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-5 py-3">
+                <span className="h-3 w-3 rounded-full bg-red-400" />
+                <span className="h-3 w-3 rounded-full bg-amber-400" />
+                <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                <span className="ml-auto rounded-full bg-slate-100 px-4 py-1.5 text-[10px] font-black tracking-widest text-slate-500 uppercase">
                   simplview.ai/live
                 </span>
               </div>
 
-              <div className="grid gap-5 p-5 md:p-7">
-                <div className="rounded-lg bg-slate-950 p-5 text-white">
-                  <p className="text-[11px] font-black uppercase text-sky-300">
+              {/* Dashboard Content */}
+              <div className="grid gap-6 p-6 md:p-8">
+                {/* Search / Question Bar */}
+                <div className="rounded-xl bg-[#0A0D14] p-6 text-white shadow-md">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
                     Ask Simplview
                   </p>
-                  <p className="mt-3 text-2xl font-black leading-tight">
+                  <p className="mt-3 text-2xl font-black leading-tight tracking-tight md:text-3xl">
                     Why did Mumbai revenue drop last month?
                   </p>
-                  <div className="mt-5 flex flex-wrap gap-2">
+                  <div className="mt-6 flex flex-wrap gap-2">
                     {["SKU mix", "Distributor delay", "Forecast risk"].map(
                       (item) => (
                         <span
                           key={item}
-                          className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/80"
+                          className="rounded-full bg-white/10 border border-white/5 px-4 py-1.5 text-[11px] font-bold text-white/80"
                         >
                           {item}
                         </span>
@@ -185,44 +224,39 @@ export default function HowItWorksSection() {
                   </div>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-[1fr_0.72fr]">
-                  <div className="rounded-lg border border-slate-200 bg-white p-4">
+                {/* Data & Trace Blocks */}
+                <div className="grid gap-5 md:grid-cols-[1.2fr_1fr]">
+                  <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-black">Revenue diagnostic</p>
-                      <span className="text-xs font-black text-emerald-600">
+                      <p className="text-[13px] font-black uppercase tracking-wide text-slate-900">
+                        Revenue diagnostic
+                      </p>
+                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-black uppercase text-emerald-700">
                         30 sec
                       </span>
                     </div>
-                    <div className="mt-5 flex h-40 items-end gap-2">
-                      {[54, 88, 64, 104, 78, 132, 94, 116].map(
-                        (height, index) => (
-                          <motion.span
-                            key={`${height}-${index}`}
-                            initial={{ height: 20 }}
-                            whileInView={{ height }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: index * 0.04 }}
-                            className="w-full rounded-sm bg-linear-to-t from-blue-700 via-sky-400 to-lime-300"
-                          />
-                        ),
-                      )}
+                    {/* Integrated LiveChart replacing static heights */}
+                    <div className="mt-8 flex h-40 items-end gap-2 w-full">
+                      <LiveChart heights={[45, 65, 50, 85, 60, 95, 75, 90]} />
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-slate-200 bg-white p-4">
-                    <p className="text-sm font-black">Trace</p>
-                    <div className="mt-4 space-y-3">
+                  <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <p className="text-[13px] font-black uppercase tracking-wide text-slate-900">
+                      Trace
+                    </p>
+                    <div className="mt-6 space-y-4">
                       {timeline.map((item, index) => (
                         <motion.div
                           key={item}
-                          initial={{ opacity: 0.3, x: 12 }}
+                          initial={{ opacity: 0, x: 10 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
-                          transition={{ delay: index * 0.1, duration: 0.45 }}
-                          className="flex items-center gap-2 text-xs font-bold text-slate-600"
+                          transition={{ delay: index * 0.15, duration: 0.4 }}
+                          className="flex items-center gap-3 text-[13px] font-bold text-slate-600"
                         >
-                          <span className="grid h-5 w-5 place-items-center rounded-full bg-emerald-50 text-emerald-600">
-                            <Check className="h-3 w-3" />
+                          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-emerald-50 text-emerald-600">
+                            <Check className="h-3.5 w-3.5" strokeWidth={3} />
                           </span>
                           {item}
                         </motion.div>
@@ -235,8 +269,8 @@ export default function HowItWorksSection() {
           </motion.div>
         </div>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-12 lg:items-center">
-          {/* Left Column (5 of 12 columns) */}
+        {/* Features Section */}
+        <div className="mt-24 grid gap-12 lg:grid-cols-12 lg:items-center">
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -259,7 +293,6 @@ export default function HowItWorksSection() {
             </p>
           </motion.div>
 
-          {/* Right Column (7 of 12 columns) */}
           <div className="grid gap-5 sm:grid-cols-2 lg:col-span-7">
             {features.map((feature, index) => (
               <motion.article
@@ -272,19 +305,17 @@ export default function HowItWorksSection() {
                   delay: index * 0.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                // Removed Framer Motion whileHover. Handled entirely via optimized Tailwind transitions.
-                // Pure bg-white ensures the card pops against the section background.
-                className="group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.15)] cursor-default"
+                className="group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl cursor-default"
               >
                 <div className="mb-5 flex items-start justify-between">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-slate-900 text-white shadow-md transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-600">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-slate-900 text-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:bg-blue-600">
                     <feature.icon className="h-5 w-5" strokeWidth={2} />
                   </span>
                   <ArrowRight className="h-4 w-4 text-slate-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-600" />
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold leading-tight text-slate-900">
+                  <h3 className="text-[15px] font-black leading-tight text-slate-900">
                     {feature.title}
                   </h3>
                   <p className="mt-2 text-[13px] font-medium leading-relaxed text-slate-500">
@@ -296,44 +327,44 @@ export default function HowItWorksSection() {
           </div>
         </div>
 
+        {/* Pricing Section */}
         <motion.div
           id="pricing"
-          className="mt-16 scroll-mt-24 overflow-hidden rounded-lg border border-slate-200 bg-slate-950 text-white shadow-[0_35px_110px_rgba(15,23,42,0.25)] md:scroll-mt-28"
+          className="mt-32 scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200 bg-slate-950 text-white shadow-2xl md:scroll-mt-28"
           initial={{ y: 36, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <div className="grid lg:grid-cols-[1fr_0.78fr]">
-            <div className="relative min-h-[25rem] overflow-hidden p-6 md:p-9">
-              <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-[0.24]" />
-              <div className="absolute inset-0 bg-linear-to-br from-slate-950 via-slate-950/[0.86] to-blue-950/[0.72]" />
+          <div className="grid lg:grid-cols-[1fr_0.75fr]">
+            <div className="relative min-h-[25rem] overflow-hidden p-8 md:p-12">
+              <div className="absolute inset-0 bg-[url('/bg.gif')] bg-cover bg-center opacity-[0.15] blur-sm" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0A0D14] via-[#0A0D14]/90 to-blue-950/80" />
               <div className="relative">
-                <span className="inline-flex rounded-full bg-lime-300 px-3 py-1 text-[11px] font-black uppercase text-slate-950">
+                <span className="inline-flex rounded-full bg-green-300 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-slate-950">
                   Free for now
                 </span>
-                <h2 className="mt-6 max-w-xl text-4xl font-black leading-[1.02] tracking-tight md:text-6xl">
+                <h2 className="mt-8 max-w-xl text-4xl font-black leading-[1.05] tracking-tight md:text-5xl lg:text-6xl">
                   AI-powered Data Team{" "}
-                  <span className="font-serif italic font-semibold">
+                  <span className="font-serif italic font-semibold text-white/80">
                     Start for free.
                   </span>
                 </h2>
-                <p className="mt-5 max-w-lg text-base font-semibold leading-7 text-white/[0.72]">
+                <p className="mt-6 max-w-md text-base font-medium leading-relaxed text-white/60">
                   Start for free with Simplview&apos;s AI-powered Data Analysis.
                   Unlock insights and enhance efficiency - no strings attached.
-                  Elevate your data game today!
                 </p>
               </div>
 
-              <div className="relative mt-9 grid max-w-xl grid-cols-3 gap-2">
+              <div className="relative mt-12 grid max-w-md grid-cols-3 gap-3">
                 {["Upload", "Ask", "Chart"].map((item, index) => (
                   <motion.div
                     key={item}
                     initial={{ y: 12, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.08, duration: 0.45 }}
-                    className="rounded-lg border border-white/[0.12] bg-white/[0.08] p-3 text-center text-xs font-black uppercase text-white/[0.75]"
+                    transition={{ delay: index * 0.1, duration: 0.45 }}
+                    className="rounded-xl border border-white/10 bg-white/5 p-4 text-center text-[11px] font-black uppercase tracking-widest text-white/80 shadow-sm"
                   >
                     {item}
                   </motion.div>
@@ -341,77 +372,69 @@ export default function HowItWorksSection() {
               </div>
             </div>
 
-            <div className="bg-[#06101f] p-5 text-white md:p-7">
-              <div className="relative h-full overflow-hidden rounded-lg border border-white/[0.14] bg-white/[0.08] p-5 shadow-[0_18px_70px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-lime-300 via-sky-300 to-blue-500" />
+            <div className="bg-[#0A0D14] p-6 text-white md:p-8">
+              <div className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-md">
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-600 via-cyan-400 to-green-300" />
+
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs font-black uppercase text-lime-300">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
                       Free Plan
                     </p>
-                    <h3 className="mt-2 text-2xl font-black">Free</h3>
+                    <h3 className="mt-3 text-3xl font-black">Free</h3>
                   </div>
                   <div className="text-right">
-                    <p className="text-5xl font-black tracking-tight">$00</p>
-                    <p className="text-xs font-bold text-white/[0.45]">
+                    <p className="text-5xl font-black tracking-tighter">$0</p>
+                    <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-white/40">
                       for now
                     </p>
                   </div>
                 </div>
 
-                <p className="mt-5 text-sm font-semibold leading-6 text-white/[0.68]">
-                  Start for free with Simplview&apos;s AI-powered Data Analysis.
-                  Unlock insights and enhance efficiency - no strings attached.
-                </p>
-
-                <div className="mt-6 rounded-lg border border-white/[0.12] bg-slate-950/60 p-4">
+                <div className="mt-8 rounded-xl border border-white/10 bg-black/40 p-5">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-black uppercase text-sky-200">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-sky-300">
                       Included this month
                     </p>
-                    <span className="rounded-full bg-white/[0.08] px-3 py-1 text-[11px] font-black text-white/[0.72]">
-                      0 / 15 used
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-black text-white/80">
+                      15 allowed
                     </span>
                   </div>
-                  <div className="mt-4 grid grid-cols-[repeat(15,minmax(0,1fr))] gap-1">
-                    {Array.from({ length: 15 }).map((_, index) => (
-                      <motion.span
-                        key={index}
-                        initial={{ scaleY: 0.35, opacity: 0.35 }}
-                        whileInView={{ scaleY: 1, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.025, duration: 0.35 }}
-                        className="h-10 origin-bottom rounded-sm bg-linear-to-t from-blue-600 to-lime-300"
-                      />
-                    ))}
+                  <div className="mt-6 h-12">
+                    <LiveChart
+                      heights={[
+                        30, 45, 25, 60, 40, 75, 55, 80, 45, 65, 35, 90, 50, 70,
+                        85,
+                      ]}
+                    />
                   </div>
                 </div>
 
-                <a
-                  href="#contact"
-                  className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-lime-300 px-5 py-3 text-sm font-black text-slate-950 shadow-xl shadow-lime-950/20 transition-all hover:-translate-y-0.5 hover:bg-lime-200 active:scale-95"
-                >
-                  Buy Now
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-
-                <div className="mt-6 space-y-3">
+                <div className="mt-auto pt-8 space-y-4">
                   {[
                     "15 Charts / month",
-                    "Csv/ Excel Upload",
+                    "CSV / Excel Upload",
                     "Google Sheets Connectivity",
                   ].map((item) => (
                     <div
                       key={item}
-                      className="flex items-center gap-3 rounded-lg border border-white/[0.12] bg-white/[0.08] px-4 py-3 text-sm font-black text-white/[0.82]"
+                      className="flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 px-5 py-3.5 text-[13px] font-bold text-white/90"
                     >
-                      <span className="grid h-6 w-6 place-items-center rounded-full bg-lime-300 text-slate-950">
-                        <Check className="h-3.5 w-3.5" />
+                      <span className="grid h-6 w-6 place-items-center rounded-full bg-green-300/20 text-green-400">
+                        <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       </span>
                       {item}
                     </div>
                   ))}
                 </div>
+
+                <a
+                  href="#contact"
+                  className="group mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-4 text-[14px] font-black text-slate-900 shadow-xl transition-all hover:bg-slate-200 hover:-translate-y-0.5 active:scale-95"
+                >
+                  Start for Free
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
               </div>
             </div>
           </div>

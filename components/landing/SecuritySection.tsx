@@ -48,7 +48,7 @@ export default function SecuritySection() {
       id="security"
       className="relative z-10 overflow-hidden bg-slate-950 text-white"
     >
-      <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-[0.28]" />
+      <div className="absolute inset-0 bg-[url('/bg.gif')] bg-cover bg-center opacity-[0.28]" />
       <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/[0.86] to-slate-950" />
 
       <div className="relative mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
@@ -65,7 +65,9 @@ export default function SecuritySection() {
             </span>
             <h2 className="mt-5 max-w-xl text-4xl font-black leading-[1.02] tracking-tight md:text-6xl">
               Your data never leaves{" "}
-              <span className="font-serif italic font-semibold">your hands</span>
+              <span className="font-serif italic font-semibold">
+                your hands
+              </span>
             </h2>
             <p className="mt-5 max-w-lg text-base font-medium leading-7 text-white/[0.68]">
               Simplview AI analytics platform offers fully secured deployment -
@@ -172,7 +174,7 @@ export default function SecuritySection() {
               </p>
             </div>
 
-            <div className="min-h-72 bg-[url('/bg.png')] bg-cover bg-center p-5 lg:min-h-full">
+            <div className="min-h-72 bg-[url('/bg.gif')] bg-cover bg-center p-5 lg:min-h-full">
               <div className="grid h-full content-end">
                 <div className="rounded-lg bg-slate-950/[0.82] p-5 text-white backdrop-blur-md">
                   <p className="text-xs font-black uppercase text-sky-200">
