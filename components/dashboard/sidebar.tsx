@@ -18,6 +18,7 @@ import {
   LogOut,
   Star,
 } from "lucide-react";
+import Image from "next/image";
 
 interface Section {
   title: string;
@@ -108,15 +109,18 @@ export function Sidebar() {
         {/* Logo */}
         <div className="p-5 pb-3">
           <div className="flex items-center gap-3">
-            <motion.div
-              whileHover={{ rotate: 5, scale: 1.05 }}
-              className="w-9 h-9 rounded-xl bg-brand flex items-center justify-center shadow-lg shadow-blue-500/20 cursor-pointer"
-            >
-              <span className="text-white font-bold text-base">S</span>
-            </motion.div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">
-              Simplview
-            </span>
+            <Image
+              src="/icon.png"
+              alt="Simplview"
+              width={40}
+              height={40}
+              className="rounded-xl"
+            />
+            <div>
+              <h1 className="font-semibold text-[17px]">Simplview</h1>
+
+              <p className="text-xs text-slate-500">AI Business Intelligence</p>
+            </div>
           </div>
         </div>
         <div className="mx-4 h-px bg-slate-200/60 mb-2" />
@@ -261,7 +265,7 @@ export function Sidebar() {
 
             <div className="min-w-0 flex-1 text-left">
               <p className="truncate text-sm font-semibold text-slate-900">
-                Squirtle 
+                Squirtle
               </p>
 
               <p className="text-xs text-slate-500">Free Plan</p>
