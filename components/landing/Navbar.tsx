@@ -107,7 +107,7 @@ export default function Navbar() {
 
           <div className="hidden items-center gap-2 md:flex">
             <a
-              href="#pricing"
+              href="/dashboard"
               className={`rounded-full px-4 py-2 text-sm font-black transition-all hover:-translate-y-0.5 ${
                 scrolled
                   ? "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
@@ -117,7 +117,7 @@ export default function Navbar() {
               Start free
             </a>
             <a
-              href="#contact"
+              href="/dashboard"
               className="group inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-black text-white shadow-xl shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:bg-blue-500 active:scale-95"
             >
               Book demo
@@ -192,14 +192,14 @@ export default function Navbar() {
 
               <div className="grid gap-3">
                 <a
-                  href="#pricing"
+                  href="/dashboard"
                   onClick={closeMenu}
                   className="rounded-full bg-white px-6 py-4 text-center text-sm font-black text-slate-950 active:scale-[0.98]"
                 >
                   Start free
                 </a>
                 <a
-                  href="#contact"
+                  href="/dashboard"
                   onClick={closeMenu}
                   className="rounded-full border border-white/[0.15] bg-blue-600 px-6 py-4 text-center text-sm font-black text-white active:scale-[0.98]"
                 >

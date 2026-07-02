@@ -1,16 +1,14 @@
 "use client";
 
-import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import Navbar from "@/components/landing/Navbar";
-import ProblemsSection from "@/components/landing/ProblemsSection";
 import SecuritySection from "@/components/landing/SecuritySection";
 import StatsSection from "@/components/landing/StatsSection";
-import WhySimplviewSection from "@/components/landing/WhySimplviewSection";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -67,8 +65,8 @@ export default function Home() {
             className="mt-8 flex flex-col items-center gap-3 sm:flex-row"
           >
             {/* Primary — Demo */}
-            <a
-              href="#pricing"
+            <Link
+              href="/dashboard"
               className="group relative inline-flex overflow-hidden rounded-full bg-blue-600 px-7 py-3 text-sm font-black text-white shadow-2xl shadow-blue-950/25 transition-all hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-950/40 active:scale-95"
             >
               <span className="relative z-10 flex items-center gap-2">
@@ -76,7 +74,7 @@ export default function Home() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
               <span className="absolute inset-y-0 -left-12 w-10 rotate-12 bg-white/[0.35] blur-md transition-transform duration-700 group-hover:translate-x-44" />
-            </a>
+            </Link>
 
             {/* Secondary — Get Started */}
             <a
