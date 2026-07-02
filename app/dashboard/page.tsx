@@ -134,13 +134,13 @@ export default function Dashboard() {
       >
         {/* Header - Fixed the 'd' clipping bug with pr-2 */}
         <motion.div variants={item} className="text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-800 mb-4 text-mono">
             Simplview{" "}
             <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 pr-2">
               Launchpad
             </span>
           </h1>
-          <p className="text-sm sm:text-base text-slate-500 font-medium tracking-tight">
+          <p className="text-sm sm:text-base text-slate-500 font-medium tracking-tight font-serif italic">
             Interact with your data and explore the boundless creative world
           </p>
         </motion.div>
@@ -179,13 +179,13 @@ export default function Dashboard() {
                 ref={textareaRef}
                 value={inputValue}
                 onChange={handleInput}
-                className="w-full bg-transparent outline-none resize-none text-slate-900 text-base px-3 py-2 peer z-20 relative font-medium leading-relaxed max-h-[200px] overflow-y-auto"
+                className="w-full bg-transparent outline-none resize-none text-slate-900 text-base px-3 py-2 peer z-20 relative font-medium font-serif  leading-relaxed max-h-[200px] overflow-y-auto"
                 spellCheck={false}
                 rows={1}
               />
               {/* Typewriter Overlay */}
               {inputValue.length === 0 && (
-                <div className="absolute top-2 left-3 pointer-events-none text-slate-400 text-base z-10 flex items-center">
+                <div className="absolute top-2 left-3 pointer-events-none text-slate-400 text-base z-10 flex items-center font-serif">
                   {placeholderText}
                   <motion.span
                     animate={{ opacity: [1, 0] }}
@@ -231,7 +231,7 @@ export default function Dashboard() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${inputValue.length > 0 || attachments.length > 0 ? "bg-blue-600 text-white shadow-md hover:bg-blue-700" : "bg-slate-50 border border-slate-100 text-slate-300"}`}
+                className={`w-9 font-serif italic h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${inputValue.length > 0 || attachments.length > 0 ? "bg-blue-600 text-white shadow-md hover:bg-blue-700" : "bg-slate-50 border border-slate-100 text-slate-300"}`}
               >
                 <ArrowUp className="w-5 h-5" />
               </motion.button>
@@ -244,11 +244,11 @@ export default function Dashboard() {
           variants={item}
           className="flex justify-center gap-4 sm:gap-8 text-sm text-slate-500 mb-12"
         >
-          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group">
+          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group font-serif">
             <StarPlus className="w-4 h-4 hover:text-blue-500 group-hover:animate-pulse" />{" "}
             Start From Scratch
           </button>
-          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group">
+          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group font-serif italic">
             <FileText className="w-4 h-4 text-slate-400 group-hover:text-blue-500" />{" "}
             Try a Template
           </button>
@@ -257,7 +257,7 @@ export default function Dashboard() {
         {/* Recent Grids */}
         <motion.div
           variants={item}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl mx-auto pb-12"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl mx-auto pb-12 text-mono"
         >
           {/* Smartbooks Column */}
           <div>
