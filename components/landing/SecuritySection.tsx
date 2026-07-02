@@ -9,6 +9,7 @@ import {
   MessageCircle,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 
 type SecurityItem = {
   num: string;
@@ -144,8 +145,8 @@ export default function SecuritySection() {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <div className="grid lg:grid-cols-[1fr_0.78fr]">
-            <div className="p-6 md:p-10">
-              <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-[11px] font-black uppercase text-blue-600">
+            <Link href="/dashboard" className="p-6 md:p-10 cursor-pointer">
+              <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-[11px] font-black uppercase text-blue-600 cursor-pointer">
                 Book a live demo
               </span>
               <h2 className="mt-5 max-w-2xl text-4xl font-black leading-[1.04] tracking-tight md:text-5xl">
@@ -160,11 +161,11 @@ export default function SecuritySection() {
                 first session.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <button className="group inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-black text-white shadow-xl shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:bg-blue-500 active:scale-95">
+                <button className="group inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-black text-white shadow-xl shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:bg-blue-500 active:scale-95 cursor-pointer">
                   Book my demo - it&apos;s free
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
-                <button className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-black text-slate-900 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 active:scale-95">
+                <button className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-black text-slate-900 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 active:scale-95 cursor-pointer">
                   <MessageCircle className="h-4 w-4" />
                   Talk to sales
                 </button>
@@ -172,7 +173,7 @@ export default function SecuritySection() {
               <p className="mt-5 text-xs font-bold text-slate-400">
                 No spam. No hard sell. Just 20 minutes with your data.
               </p>
-            </div>
+            </Link>
 
             <div className="min-h-72 bg-[url('/bg.gif')] bg-cover bg-center p-5 lg:min-h-full">
               <div className="grid h-full content-end">

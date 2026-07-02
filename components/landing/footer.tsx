@@ -46,13 +46,13 @@ export default function Footer() {
             </p>
             <div className="mt-5 grid grid-cols-2 gap-3">
               <a
-                href="#pricing"
+                href="/dashboard"
                 className="rounded-full bg-white px-4 py-3 text-center text-sm font-black text-slate-950 transition-all hover:-translate-y-0.5"
               >
                 Start free
               </a>
               <a
-                href="#contact"
+                href="/dashboard"
                 className="group inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-4 py-3 text-sm font-black text-white transition-all hover:-translate-y-0.5 hover:bg-blue-500"
               >
                 Demo
