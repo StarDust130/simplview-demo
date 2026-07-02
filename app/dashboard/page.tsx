@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
-  Globe,
-  Sparkles,
   FileText,
-  BarChart3,
   MessageSquare,
   Clock,
   ArrowUp,
@@ -16,13 +14,19 @@ import {
   Cloud,
   Database,
   HardDrive,
-  LayoutGrid,
   FileSpreadsheet,
   Mic,
   StarPlus,
+  MessagesSquare,
 } from "lucide-react";
+import {
+  createSmartbook,
+  formatSmartbookPreview,
+  loadSmartbooks,
+  saveSmartbooks,
+  subscribeToSmartbookUpdates,
+} from "@/lib/chat";
 
-// --- Typewriter Hook ---
 const useTypewriter = (
   texts: string[],
   typingSpeed = 40,
@@ -53,6 +57,7 @@ const useTypewriter = (
         }
       }, typingSpeed);
     }
+
     return () => clearTimeout(timer);
   }, [
     text,
@@ -67,11 +72,10 @@ const useTypewriter = (
   return text;
 };
 
-// --- Animation Variants ---
 const container = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
+} as const;
 
 const item = {
   hidden: { y: 15, opacity: 0 },
@@ -80,13 +84,15 @@ const item = {
     opacity: 1,
     transition: { type: "spring", damping: 22, stiffness: 120 },
   },
-};
+} as const;
 
 export default function Dashboard() {
+  const router = useRouter();
   const [inputValue, setInputValue] = useState("");
   const [isWebSearch, setIsWebSearch] = useState(false);
   const [attachments, setAttachments] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [smartbooks, setSmartbooks] = useState(loadSmartbooks());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const placeholderText = useTypewriter([
@@ -95,29 +101,55 @@ export default function Dashboard() {
     "Compare user retention cohorts...",
   ]);
 
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
-    }
+  const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(event.target.value);
   };
 
   const addMockAttachment = () => {
-    if (attachments.length < 3)
+    if (attachments.length < 3) {
       setAttachments([
         ...attachments,
         `Dataset_v${attachments.length + 1}.csv`,
       ]);
+    }
   };
 
   const removeAttachment = (index: number) => {
-    setAttachments(attachments.filter((_, i) => i !== index));
+    setAttachments(attachments.filter((_, itemIndex) => itemIndex !== index));
+  };
+
+  useEffect(() => {
+    const syncSmartbooks = () => setSmartbooks(loadSmartbooks());
+
+    syncSmartbooks();
+    return subscribeToSmartbookUpdates(syncSmartbooks);
+  }, []);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [inputValue]);
+
+  const submitSmartbook = () => {
+    const prompt = inputValue.trim();
+    if (!prompt) return;
+
+    const smartbook = createSmartbook(
+      attachments.length > 0
+        ? `${prompt}\n\nAttached files: ${attachments.join(", ")}`
+        : prompt,
+    );
+
+    saveSmartbooks([smartbook, ...smartbooks]);
+    setInputValue("");
+    setAttachments([]);
+    router.push(`/chat/${smartbook.id}?autostart=1`);
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center pt-16 lg:pt-24 relative bg-[#fcfcfc] font-sans px-4 sm:px-6 overflow-hidden">
-      {/* Background Mesh */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
         <motion.div
           animate={{ scale: [1, 1.02, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -132,7 +164,6 @@ export default function Dashboard() {
         animate="visible"
         className="relative z-10 w-full max-w-4xl"
       >
-        {/* Header - Fixed the 'd' clipping bug with pr-2 */}
         <motion.div variants={item} className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-800 mb-4 text-mono">
             Simplview{" "}
@@ -145,17 +176,15 @@ export default function Dashboard() {
           </p>
         </motion.div>
 
-        {/* Dynamic AI Input */}
         <motion.div variants={item} className="w-full max-w-3xl mx-auto mb-8">
           <div className="relative bg-white rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] focus-within:shadow-[0_12px_40px_-12px_rgba(37,99,235,0.2)] focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:border-blue-300 transition-all duration-300 p-2 sm:p-3 group flex flex-col">
-            {/* File Attachments */}
             {attachments.length > 0 && (
               <div className="flex flex-wrap gap-2 px-3 pt-2 pb-1">
-                {attachments.map((file, idx) => (
+                {attachments.map((file, index) => (
                   <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    key={idx}
+                    key={file}
                     className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm"
                   >
                     <FileLineChart className="w-4 h-4 text-emerald-500" />
@@ -163,7 +192,7 @@ export default function Dashboard() {
                       {file}
                     </span>
                     <button
-                      onClick={() => removeAttachment(idx)}
+                      onClick={() => removeAttachment(index)}
                       className="text-slate-400 hover:text-red-500 transition-colors ml-1 cursor-pointer"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -173,17 +202,21 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Elastic Text Area */}
             <div className="relative w-full min-h-[44px]">
               <textarea
                 ref={textareaRef}
                 value={inputValue}
                 onChange={handleInput}
-                className="w-full bg-transparent outline-none resize-none text-slate-900 text-base px-3 py-2 peer z-20 relative font-medium font-serif  leading-relaxed max-h-[200px] overflow-y-auto"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    submitSmartbook();
+                  }
+                }}
+                className="w-full bg-transparent outline-none resize-none text-slate-900 text-base px-3 py-2 peer z-20 relative font-medium font-serif leading-relaxed max-h-[200px] overflow-y-auto"
                 spellCheck={false}
                 rows={1}
               />
-              {/* Typewriter Overlay */}
               {inputValue.length === 0 && (
                 <div className="absolute top-2 left-3 pointer-events-none text-slate-400 text-base z-10 flex items-center font-serif">
                   {placeholderText}
@@ -196,7 +229,6 @@ export default function Dashboard() {
               )}
             </div>
 
-            {/* Bottom Toolbar */}
             <div className="flex items-center justify-between px-2 pt-2 mt-2 border-t border-slate-50">
               <div className="flex items-center gap-1 sm:gap-2">
                 <button
@@ -206,7 +238,6 @@ export default function Dashboard() {
                   <Plus className="w-5 h-5" />
                 </button>
 
-                {/* Globe with Tooltip */}
                 <div className="relative group/tooltip">
                   <button
                     onClick={() => setIsWebSearch(!isWebSearch)}
@@ -227,10 +258,10 @@ export default function Dashboard() {
                 </button>
               </div>
 
-              {/* Submit Button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={submitSmartbook}
                 className={`w-9 font-serif italic h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer ${inputValue.length > 0 || attachments.length > 0 ? "bg-blue-600 text-white shadow-md hover:bg-blue-700" : "bg-slate-50 border border-slate-100 text-slate-300"}`}
               >
                 <ArrowUp className="w-5 h-5" />
@@ -239,69 +270,91 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Quick Actions */}
         <motion.div
           variants={item}
           className="flex justify-center gap-4 sm:gap-8 text-sm text-slate-500 mb-12"
         >
-          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group font-serif">
-            <StarPlus className="w-4 h-4 hover:text-blue-500 group-hover:animate-pulse" />{" "}
+          <button
+            onClick={() => {
+              setInputValue("");
+              setAttachments([]);
+              textareaRef.current?.focus();
+            }}
+            className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group font-serif"
+          >
+            <StarPlus className="w-4 h-4 hover:text-blue-500 group-hover:animate-pulse" />
             Start From Scratch
           </button>
           <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group font-serif italic">
-            <FileText className="w-4 h-4 text-slate-400 group-hover:text-blue-500" />{" "}
+            <FileText className="w-4 h-4 text-slate-400 group-hover:text-blue-500" />
             Try a Template
           </button>
         </motion.div>
 
-        {/* Recent Grids */}
         <motion.div
           variants={item}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl mx-auto pb-12 text-mono"
         >
-          {/* Smartbooks Column */}
-          <div>
-            <div className="flex items-center gap-2 mb-4 px-1">
-              <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-              <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
-                Recent Smartbooks
-              </h3>
-            </div>
-            <div className="space-y-3">
-              <div className="w-full flex items-center justify-between p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-sm md:hover:shadow-md md:hover:border-blue-200 transition-all cursor-pointer group">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50 transition-colors">
-                    <MessageSquare className="w-4 h-4 text-slate-500 group-hover:text-blue-600" />
-                  </div>
-                  <span className="text-sm font-semibold text-slate-700 group-hover:text-slate-900">
-                    📉 Sales Drop?
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 text-xs font-medium text-slate-400">
-                  <Clock className="w-3 h-3" /> 7/2/2026
-                </div>
+          {smartbooks.length > 0 ? (
+            <div>
+              <div className="flex items-center gap-2 mb-4 px-1">
+                <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
+                <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
+                  Recent Smartbooks
+                </h3>
+              </div>
+              <div className="space-y-3">
+                {smartbooks.slice(0, 4).map((smartbook) => (
+                  <button
+                    key={smartbook.id}
+                    onClick={() => router.push(`/chat/${smartbook.id}`)}
+                    className="w-full flex items-center justify-between p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-sm md:hover:shadow-md md:hover:border-blue-200 transition-all cursor-pointer group text-left"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50 transition-colors">
+                        <MessagesSquare className="w-4 h-4 text-slate-500 group-hover:text-blue-600" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="block text-sm font-semibold text-slate-700 group-hover:text-slate-900 truncate">
+                          {smartbook.title}
+                        </span>
+                        <span className="block text-xs text-slate-400 truncate max-w-[240px]">
+                          {formatSmartbookPreview(smartbook.messages[0])}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs font-medium text-slate-400 shrink-0">
+                      <Clock className="w-3 h-3" />
+                      {new Intl.DateTimeFormat(undefined, {
+                        month: "numeric",
+                        day: "numeric",
+                        year: "numeric",
+                      }).format(new Date(smartbook.updatedAt))}
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
+          ) : null}
 
-          {/* Dashboards Column */}
-          <div>
-            <div className="flex items-center gap-2 mb-4 px-1">
-              <div className="w-1.5 h-4 bg-blue-500 rounded-full" />
-              <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
-                Recent Dashboards
-              </h3>
+          {smartbooks.length > 0 ? (
+            <div>
+              <div className="flex items-center gap-2 mb-4 px-1">
+                <div className="w-1.5 h-4 bg-blue-500 rounded-full" />
+                <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
+                  Recent Dashboards
+                </h3>
+              </div>
+              <div className="h-[72px] sm:h-[88px] flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50">
+                <p className="text-sm text-slate-400 font-medium">
+                  No dashboards published
+                </p>
+              </div>
             </div>
-            <div className="h-[72px] sm:h-[88px] flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50">
-              <p className="text-sm text-slate-400 font-medium">
-                No dashboards published
-              </p>
-            </div>
-          </div>
+          ) : null}
         </motion.div>
       </motion.div>
 
-      {/* --- Data Source Modal --- */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -328,18 +381,18 @@ export default function Dashboard() {
 
               <div className="flex items-center justify-between w-full max-w-lg mx-auto mb-10 relative">
                 <div className="absolute top-1/2 left-0 w-full h-[2px] bg-slate-100 -z-10 -translate-y-1/2" />
-                {["Source", "Auth", "Select", "Confirm"].map((step, i) => (
+                {["Source", "Auth", "Select", "Confirm"].map((step, index) => (
                   <div
                     key={step}
                     className="flex items-center gap-2 bg-white px-2"
                   >
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-400"}`}
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${index === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-400"}`}
                     >
-                      {i + 1}
+                      {index + 1}
                     </div>
                     <span
-                      className={`text-sm font-semibold hidden sm:block ${i === 0 ? "text-indigo-600" : "text-slate-400"}`}
+                      className={`text-sm font-semibold hidden sm:block ${index === 0 ? "text-indigo-600" : "text-slate-400"}`}
                     >
                       {step}
                     </span>
@@ -359,7 +412,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div
                   onClick={() => setIsModalOpen(false)}
-                  className="flex flex-col items-center justify-center p-6 border-2 border-emerald-500 bg-emerald-50/30 rounded-2xl cursor-pointer hover:bg-emerald-50/50 transition-colors "
+                  className="flex flex-col items-center justify-center p-6 border-2 border-emerald-500 bg-emerald-50/30 rounded-2xl cursor-pointer hover:bg-emerald-50/50 transition-colors"
                 >
                   <FileLineChart className="w-8 h-8 text-emerald-600 mb-3" />
                   <span className="font-bold text-slate-900">
@@ -373,14 +426,14 @@ export default function Dashboard() {
                   { icon: HardDrive, name: "Cloud SQL" },
                   { icon: Cloud, name: "Cloud Storage" },
                   { icon: Database, name: "Firestore" },
-                ].map((item, idx) => (
+                ].map((source, index) => (
                   <div
-                    key={idx}
+                    key={index}
                     className="flex flex-col items-center justify-center p-6 border border-slate-100 bg-slate-50/50 rounded-2xl opacity-60 grayscale cursor-not-allowed"
                   >
-                    <item.icon className="w-8 h-8 text-slate-400 mb-3" />
+                    <source.icon className="w-8 h-8 text-slate-400 mb-3" />
                     <span className="font-bold text-slate-600 mb-1">
-                      {item.name}
+                      {source.name}
                     </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-200 px-2 py-0.5 rounded-full">
                       Coming Soon
