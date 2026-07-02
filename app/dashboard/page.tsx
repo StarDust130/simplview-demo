@@ -19,6 +19,7 @@ import {
   LayoutGrid,
   FileSpreadsheet,
   Mic,
+  StarPlus,
 } from "lucide-react";
 
 // --- Typewriter Hook ---
@@ -244,7 +245,7 @@ export default function Dashboard() {
           className="flex justify-center gap-4 sm:gap-8 text-sm text-slate-500 mb-12"
         >
           <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group">
-            <Sparkles className="w-4 h-4 text-blue-500 group-hover:animate-pulse" />{" "}
+            <StarPlus className="w-4 h-4 hover:text-blue-500 group-hover:animate-pulse" />{" "}
             Start From Scratch
           </button>
           <button className="flex items-center gap-2 hover:text-blue-600 transition-colors font-semibold group">
