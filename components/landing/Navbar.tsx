@@ -26,8 +26,12 @@ export default function Navbar() {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
-    setScrolled(latest > 42);
-    setHidden(latest > 120 && latest > previous);
+
+    // Delays the background state until a definitive scroll occurs
+    setScrolled(latest > 50);
+
+    // Hides the navbar only after the user clears the initial hero section
+    setHidden(latest > 50 && latest > previous);
   });
 
   useEffect(() => {
