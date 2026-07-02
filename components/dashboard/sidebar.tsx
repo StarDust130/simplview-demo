@@ -78,7 +78,7 @@ export function Sidebar() {
       {/* Mobile Toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-slate-200/60 text-slate-700 hover:text-[#2563eb] transition-colors"
+        className="lg:hidden fixed top-4 right-4 z-50 p-2.5 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-slate-200/60 text-slate-700 hover:text-[#2563eb] transition-colors"
       >
         {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
@@ -117,22 +117,24 @@ export function Sidebar() {
               className="rounded-xl"
             />
             <div>
-              <h1 className="font-semibold text-[17px]">Simplview</h1>
+              <h1 className="font-extrabold  text-[20px]">Simplview</h1>
 
-              <p className="text-xs text-slate-500">AI Business Intelligence</p>
+              <p className="text-xs font-serif italic font-normal text-slate-500">
+                AI Business Intelligence
+              </p>
             </div>
           </div>
         </div>
-        <div className="mx-4 h-px bg-slate-200/60 mb-2" />
+        <div className=" h-px bg-slate-100/60 mb-3" />
 
         {/* New Analysis */}
         <div className="px-3 mb-2">
           <motion.button
-            whileHover={{ scale: 1.02, y: -1 }}
+            whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-surface border-2 border-dotted text-black font-small font-bold text-center hover:bg-slate-100/80 hover:text-[#2563eb]transition-all cursor-pointer"
+            className="w-full font-mono flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 border-dotted border-slate-200 bg-transparent text-slate-700 text-sm font-bold hover:border-[#2563eb] hover:text-[#2563eb] hover:shadow-[3px_3px_0px_0px_#2563eb] transition-all duration-200 cursor-pointer"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4 stroke-[3]" />
             <span>New Analysis</span>
           </motion.button>
         </div>
@@ -140,15 +142,15 @@ export function Sidebar() {
         {/* Canvas */}
         <div className="px-3 mb-3">
           <motion.button
-            whileHover={{ x: 2 }}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-600 hover:bg-slate-100/80 hover:text-[#2563eb] transition-colors font-small font-bold cursor-pointer"
+            whileHover={{ x: 4 }}
+            className="w-full font-mono flex items-center gap-3 px-4 py-2.5 rounded-xl bg-transparent text-slate-600 hover:bg-slate-50 transition-all text-sm font-medium cursor-pointer hover:text-[#2563eb]"
           >
-            <LayoutDashboard className="w-5 h-5" />
+            <LayoutDashboard className="w-4 h-4" />
             <span>Canvas</span>
           </motion.button>
         </div>
 
-        <div className="mx-4 h-px bg-slate-200/60 mb-2" />
+        <div className=" h-px bg-slate-100/60 mb-2" />
 
         {/* Sections */}
         <div className="flex-1 overflow-y-auto px-2 space-y-0.5">
@@ -162,7 +164,7 @@ export function Sidebar() {
             >
               <button
                 onClick={() => toggle(section.title)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[11px] font-bold text-slate-500 hover:text-[#2563eb] hover:bg-slate-100/60 transition-colors tracking-wider uppercase cursor-pointer"
+                className="w-full font-mono flex items-center justify-between px-3 py-2.5 rounded-xl text-[11px] font-bold text-slate-500 hover:text-[#2563eb] hover:bg-slate-100/60 transition-colors tracking-wider uppercase cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   <section.icon className="w-4 h-4" />
@@ -242,7 +244,7 @@ export function Sidebar() {
             <motion.button
               key={nav.label}
               whileHover={{ x: 2 }}
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-500 hover:text-[#2563eb] hover:bg-slate-100/60 transition-colors text-sm font-medium"
+              className="w-full flex font-mono items-center gap-3 px-3 py-2 rounded-xl text-slate-500 hover:text-[#2563eb] hover:bg-slate-100/60 transition-colors text-sm font-medium"
             >
               <nav.icon className="w-4 h-4" />
               <span>{nav.label}</span>
@@ -255,7 +257,7 @@ export function Sidebar() {
           <motion.button
             whileHover={{ y: -1 }}
             whileTap={{ scale: 0.98 }}
-            className="group flex w-full items-center gap-3 rounded-xl p-2.5 transition-all duration-200 hover:bg-slate-100"
+            className="group flex font-serif w-full items-center gap-3 rounded-xl p-2.5 transition-all duration-200 hover:bg-slate-100"
           >
             <img
               src="https://avatarfiles.alphacoders.com/374/thumb-1920-374586.png"
