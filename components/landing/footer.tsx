@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 const productLinks = [
   { label: "Simplview analyst studio", href: "http://chandrashekhar.me/how-it-works" },

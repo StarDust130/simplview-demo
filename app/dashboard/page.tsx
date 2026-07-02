@@ -293,18 +293,19 @@ export default function Dashboard() {
 
         <motion.div
           variants={item}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full max-w-4xl mx-auto pb-12 text-mono"
+          className="w-full max-w-5xl mx-auto pb-12 font-mono"
         >
           {smartbooks.length > 0 ? (
-            <div>
+            <div className="w-full bg-white/50 backdrop-blur-sm rounded-3xl border border-slate-200/60 p-4 sm:p-6">
               <div className="flex items-center gap-2 mb-4 px-1">
                 <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
                 <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
                   Recent Smartbooks
                 </h3>
               </div>
-              <div className="space-y-3">
-                {smartbooks.slice(0, 4).map((smartbook) => (
+
+              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300 scrollbar-track-transparent">
+                {smartbooks.map((smartbook) => (
                   <button
                     key={smartbook.id}
                     onClick={() => router.push(`/chat/${smartbook.id}`)}
@@ -326,7 +327,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-1 text-xs font-medium text-slate-400 shrink-0">
                       <Clock className="w-3 h-3" />
                       {new Intl.DateTimeFormat(undefined, {
-                        month: "numeric",
+                        month: "short",
                         day: "numeric",
                         year: "numeric",
                       }).format(new Date(smartbook.updatedAt))}
@@ -335,23 +336,44 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-          ) : null}
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full relative overflow-hidden flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-50 to-white border border-slate-200/60 shadow-sm"
+            >
+              {/* Animated Shimmer Overlay */}
+              <motion.div
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/80 to-transparent skew-x-12 z-0"
+              />
 
-          {smartbooks.length > 0 ? (
-            <div>
-              <div className="flex items-center gap-2 mb-4 px-1">
-                <div className="w-1.5 h-4 bg-blue-500 rounded-full" />
-                <h3 className="text-xs font-bold text-slate-900 tracking-wider uppercase">
-                  Recent Dashboards
-                </h3>
+              {/* Animated Icon */}
+              <div className="relative z-10 flex items-center justify-center w-10 h-10 rounded-xl bg-blue-50 text-blue-600 shrink-0 border border-blue-100/50">
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 2,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <MessagesSquare className="w-4 h-4" />
+                </motion.div>
               </div>
-              <div className="h-[72px] sm:h-[88px] flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50">
-                <p className="text-sm text-slate-400 font-medium">
-                  No dashboards published
+
+              {/* Text Content */}
+              <div className="relative z-10 min-w-0">
+                <h3 className="text-sm font-bold text-slate-900 truncate">
+                  No chats yet
+                </h3>
+                <p className="text-xs text-slate-500 truncate mt-0.5">
+                  Start a new conversation to see your history here.
                 </p>
               </div>
-            </div>
-          ) : null}
+            </motion.div>
+          )}
         </motion.div>
       </motion.div>
 
