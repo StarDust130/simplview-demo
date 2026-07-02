@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { Figtree, Geist, Geist_Mono } from "next/font/google";
-
+import { Geist_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import { cn } from "@/lib/utils";
-
 import "./globals.css";
 
-const figtreeHeading = Figtree({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
-
-const geistSans = Geist({
+const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,17 +29,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       className={cn(
         "h-full scroll-smooth antialiased",
-        geistSans.variable,
+        manrope.variable,
+        spaceGrotesk.variable,
         geistMono.variable,
-        figtreeHeading.variable
       )}
     >
       <body className="min-h-full font-sans">{children}</body>
