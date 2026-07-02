@@ -196,7 +196,7 @@ export default function HowItWorksSection() {
                 <span className="h-3 w-3 rounded-full bg-amber-400" />
                 <span className="h-3 w-3 rounded-full bg-emerald-400" />
                 <span className="ml-auto rounded-full bg-slate-100 px-4 py-1.5 text-[10px] font-black tracking-widest text-slate-500 uppercase">
-                  simplview.ai/live
+                  simplview.com
                 </span>
               </div>
 
@@ -270,7 +270,10 @@ export default function HowItWorksSection() {
         </div>
 
         {/* Features Section */}
-        <div className="mt-24 grid gap-12 lg:grid-cols-12 lg:items-center">
+        <div
+          id="features"
+          className="mt-24 grid gap-12 lg:grid-cols-12 lg:items-center"
+        >
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -326,119 +329,6 @@ export default function HowItWorksSection() {
             ))}
           </div>
         </div>
-
-        {/* Pricing Section */}
-        <motion.div
-          id="pricing"
-          className="mt-32 scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200 bg-slate-950 text-white shadow-2xl md:scroll-mt-28"
-          initial={{ y: 36, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
-          <div className="grid lg:grid-cols-[1fr_0.75fr]">
-            <div className="relative min-h-[25rem] overflow-hidden p-8 md:p-12">
-              <div className="absolute inset-0  bg-cover bg-center opacity-[0.15] blur-sm" />
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0A0D14] via-[#0A0D14]/90 to-blue-950/80" />
-              <div className="relative">
-                <span className="inline-flex rounded-full bg-green-300 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-slate-950">
-                  Free for now
-                </span>
-                <h2 className="mt-8 max-w-xl text-4xl font-black leading-[1.05] tracking-tight md:text-5xl lg:text-6xl">
-                  AI-powered Data Team{" "}
-                  <span className="font-serif italic font-semibold text-white/80">
-                    Start for free.
-                  </span>
-                </h2>
-                <p className="mt-6 max-w-md text-base font-medium leading-relaxed text-white/60">
-                  Start for free with Simplview&apos;s AI-powered Data Analysis.
-                  Unlock insights and enhance efficiency - no strings attached.
-                </p>
-              </div>
-
-              <div className="relative mt-12 grid max-w-md grid-cols-3 gap-3">
-                {["Upload", "Ask", "Chart"].map((item, index) => (
-                  <motion.div
-                    key={item}
-                    initial={{ y: 12, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1, duration: 0.45 }}
-                    className="rounded-xl border border-white/10 bg-white/5 p-4 text-center text-[11px] font-black uppercase tracking-widest text-white/80 shadow-sm"
-                  >
-                    {item}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-[#0A0D14] p-6 text-white md:p-8">
-              <div className="relative h-full flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-md">
-                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-600 via-cyan-400 to-green-300" />
-
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-cyan-400">
-                      Free Plan
-                    </p>
-                    <h3 className="mt-3 text-3xl font-black">Free</h3>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-5xl font-black tracking-tighter">$0</p>
-                    <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-white/40">
-                      for now
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-8 rounded-xl border border-white/10 bg-black/40 p-5">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-sky-300">
-                      Included this month
-                    </p>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-black text-white/80">
-                      15 allowed
-                    </span>
-                  </div>
-                  <div className="mt-6 h-12">
-                    <LiveChart
-                      heights={[
-                        30, 45, 25, 60, 40, 75, 55, 80, 45, 65, 35, 90, 50, 70,
-                        85,
-                      ]}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-auto pt-8 space-y-4">
-                  {[
-                    "15 Charts / month",
-                    "CSV / Excel Upload",
-                    "Google Sheets Connectivity",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 px-5 py-3.5 text-[13px] font-bold text-white/90"
-                    >
-                      <span className="grid h-6 w-6 place-items-center rounded-full bg-green-300/20 text-green-400">
-                        <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                      </span>
-                      {item}
-                    </div>
-                  ))}
-                </div>
-
-                <a
-                  href="#contact"
-                  className="group mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-4 text-[14px] font-black text-slate-900 shadow-xl transition-all hover:bg-slate-200 hover:-translate-y-0.5 active:scale-95"
-                >
-                  Start for Free
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

@@ -115,7 +115,7 @@ export default function Home() {
                     <path d="M13 17V5" />
                     <path d="M8 17v-3" />
                   </svg>
-                  simplview.ai
+                  simplview.com
                 </div>
                 <div className="w-14" />
               </div>
